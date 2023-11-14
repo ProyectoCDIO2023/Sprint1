@@ -42,7 +42,7 @@ int readHumedadMojado() {
   medidaMojado = ads.readADC_SingleEnded(channelHumedad);
   
   // Mapear el valor leído para obtener la humedad en estado mojado
-  int humidityValueMojado = map(medidaMojado, 14000, 31000, 100, 0);
+  int humidityValueMojado = map(medidaMojado, 17000, 31000, 100, 0);
 
   // Mostrar el valor crudo de humedad
   Serial.print("Medida mojado (Humedad): ");
