@@ -33,10 +33,10 @@ void loop() {
     int16_t adc0;
     adc0 = ads.readADC_SingleEnded(channelValue);
 
-    // Convertir la lectura a voltaje (suponiendo que el rango de voltaje es de 0 a 3.3V)
+    // Convertir la lectura a voltaje
     voltage = adc0 * 0.0001875; // La resolución es 0.1875 mV por bit para GAIN_TWOTHIRDS
 
-    // Calcular el valor de pH (¡Esta es una ecuación de ejemplo, necesitas la ecuación adecuada para tu sensor!)
+    // Calcular el valor de pH 
     pHValue = 3.5 * voltage + Offset;
 
     // Almacenar la lectura en el array
