@@ -7,8 +7,9 @@ Adafruit_ADS1115 ads; // Crear una instancia del objeto ADS1115
 #define Offset 0.17        // Offset para el cálculo del pH (ajuste específico según el sensor)
 #define samplingInterval 20 // Intervalo de tiempo entre muestras de pH (en milisegundos)
 #define printInterval 800  // Intervalo de tiempo para imprimir los resultados (en milisegundos)
+#define ArrayLength 50     // Longitud del array de muestras de pH
 
-int pHArray[ArrayLength]; // almacena las muestras 
+float pHArray[ArrayLength]; // almacena las muestras 
 int pHArrayIndex; // Índice actual en el array de muestras de pH
 
 void setup() {
@@ -22,10 +23,16 @@ void setup() {
   ads.setGain(GAIN_TWOTHIRDS); // Puedes ajustar la ganancia según sea necesario
 }
 
+float calculatepH(int adcValue) {
+  float voltage = adcValue * 0.0001875; // La resolución es 0.1875 mV por bit para GAIN_TWOTHIRDS
+  float pHValue = 3.5 * voltage + Offset;
+  return pHValue;
+}
+
 void loop() {
   static unsigned long samplingTime = millis();
   static unsigned long printTime = millis();
-  static float pHValue, voltage;
+  static float voltage, pHValue;
 
   // Realizar muestreo a intervalos regulares
   if (millis() - samplingTime > samplingInterval) {
@@ -33,11 +40,8 @@ void loop() {
     int16_t adc0;
     adc0 = ads.readADC_SingleEnded(channelValue);
 
-    // Convertir la lectura a voltaje
-    voltage = adc0 * 0.0001875; // La resolución es 0.1875 mV por bit para GAIN_TWOTHIRDS
-
     // Calcular el valor de pH 
-    pHValue = 3.5 * voltage + Offset;
+    pHValue = calculatepH(adc0);
 
     // Almacenar la lectura en el array
     pHArray[pHArrayIndex++] = pHValue;
